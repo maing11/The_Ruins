@@ -9,10 +9,23 @@ import UIKit
 import QuartzCore
 import SceneKit
 
+
+enum GameState {
+    case loading, playing
+}
 class GameViewController: UIViewController {
 
+    var gameView:GameView {return view as! GameView}
+    var mainScene:SCNScene!
+    
+    //general
+    var gameState: GameState = .loading
+    
+    //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSence()
+        gameState = .playing
         
     }
     
@@ -32,6 +45,14 @@ class GameViewController: UIViewController {
         }
     }
     //MARK:- scence
+    
+    private func setupSence() {
+        gameView.allowsCameraControl = true
+        gameView.antialiasingMode = .multisampling4X
+        mainScene = SCNScene(named: "art.scnassets/Scenes/Stage1.scn")
+        gameView.scene = mainScene
+        gameView.isPlaying = true
+    }
     //MARK:- walls
     //MARK:- camera
     //MARK:- player
