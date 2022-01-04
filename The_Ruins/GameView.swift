@@ -14,6 +14,8 @@ class GameView: SCNView {
     private let overlayNode = SKNode()
     private var dpadSprite:SKSpriteNode!
     private var attackButtonSprite:SKSpriteNode!
+    private var hpBar: SKSpriteNode!
+    private let hpBarMaxWidth: CGFloat = 150.0
 
 
     override  func awakeFromNib() {
@@ -39,6 +41,7 @@ class GameView: SCNView {
 
         setupDpad(with: skScene)
         setupAttackButton(with: skScene)
+        setupHpBar(with: skScene)
         
         skScene.addChild(overlayNode)
         overlayNode.position = CGPoint(x: 0.0, y: h)
@@ -87,5 +90,16 @@ class GameView: SCNView {
         
         return virtualAttackButtonBounds
     }
+    
+    //MARK:- HP bar
+    private func setupHpBar(with scene:SKScene ) {
+        hpBar = SKSpriteNode(color: UIColor.green, size: CGSize(width: hpBarMaxWidth, height: 20))
+        hpBar.anchorPoint = CGPoint(x: 0.0, y: 0.0)
+        hpBar.position = CGPoint(x: 15.0, y: bounds.width - 35.0)
+        hpBar.xScale = 1.0
+        hpBar.yScale = 1.0
+        scene.addChild(hpBar)
+    }
+    
     
 }
