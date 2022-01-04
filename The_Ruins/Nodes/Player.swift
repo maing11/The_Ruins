@@ -54,8 +54,8 @@ class Player:SCNNode {
     //MARK: - animations
     private func loadAnimation() {
         loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Scenes/Hero/walk", withIdentifier: "WalkID")
-        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Scenes/Hero/attack", withIdentifier: "attackID")
-        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Scenes/Hero/die", withIdentifier: "DeathID")
+        loadAnimation(animationType: .attack1, inSceneNamed: "art.scnassets/Scenes/Hero/attack", withIdentifier: "attackID")
+        loadAnimation(animationType: .dead, inSceneNamed: "art.scnassets/Scenes/Hero/die", withIdentifier: "DeathID")
     }
     private func loadAnimation(animationType: PlayerAnimationType,inSceneNamed scene: String, withIdentifier identifier: String) {
         let sceneURL = Bundle.main.url(forResource: scene, withExtension: "dae")!
