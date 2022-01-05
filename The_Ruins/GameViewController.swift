@@ -9,6 +9,10 @@ import UIKit
 import SceneKit
 
 
+let BitmaskPlayer = 1
+let BitmaskplayerWeapon = 2
+let BitmaskWall = 64
+let BitmaskGolem  = 3
 enum GameState {
     case loading, playing
 }
@@ -25,6 +29,7 @@ class GameViewController: UIViewController {
     private var cameraStick:SCNNode!
     private var cameraXHolder: SCNNode!
     private var cameraYHolder: SCNNode!
+    private var lightstick: SCNNode!
     
     //movement
     private var controllerStoreDirection = float2(0.0)
@@ -32,12 +37,17 @@ class GameViewController: UIViewController {
     private var cameraTouch: UITouch?
     
     
+    //collisions
+    private var maxPenetrationDistance = CGFloat(0.0)
+    private var replacementPositions = [SCNNode:SCNVector3]()
+    
     //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSence()
         setupPlayer()
         setUpCamera()
+        setupLight()
         gameState = .playing
         
     }
@@ -66,6 +76,7 @@ class GameViewController: UIViewController {
 
         
         mainScene = SCNScene(named: "art.scnassets/Scenes/Stage1.scn")
+        mainScene.physicsWorld.contactDelegate = self
         gameView.scene = mainScene
         gameView.isPlaying = true
     }
@@ -99,6 +110,11 @@ class GameViewController: UIViewController {
         cameraXHolder.rotation = SCNVector4Make(0, 1, 0, xRotationValue)
         cameraYHolder.rotation = SCNVector4Make(1, 0, 0, yRotationValue)
 
+        
+    }
+    
+    private func setupLight() {
+        lightstick = mainScene.rootNode.childNode(withName: "LightStick", recursively: false)!
         
     }
     
@@ -174,20 +190,48 @@ class GameViewController: UIViewController {
         return direction
     }
     //MARK:- gameloop functions
+    
+    func updateFollowersPositions() {
+        cameraStick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
+        lightstick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
+
+    }
     //MARK:- enemies
 
 
 }
 //MARK: extension
 
+//physics
+extension GameViewController:SCNPhysicsContactDelegate {
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+    }
+    func physicsWorld(_ world: SCNPhysicsWorld, didUpdate contact: SCNPhysicsContact) {
+        
+    }
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        
+    }
+}
 
 extension GameViewController: SCNSceneRendererDelegate {
+    
+    func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
+        
+    }
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if gameState != .playing {return}
+        
+        //reset
+        replacementPositions.removeAll()
+        maxPenetrationDistance = 0.0
         
         let scene = gameView.scene!
         let direction = CharacterDirection()
         
         player!.walkIndirection(direction, time: time, scene: scene)
+        
+        updateFollowersPositions()
     }
 }
