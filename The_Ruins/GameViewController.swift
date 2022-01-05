@@ -143,5 +143,7 @@ extension GameViewController: SCNSceneRendererDelegate {
         
         let scene = gameView.scene!
         let direction = CharacterDirection()
+        
+        player!.walkIndirection(direction, time: time, scene: scene)
     }
 }

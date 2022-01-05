@@ -26,6 +26,10 @@ class Player:SCNNode {
     private var attack1Animation = CAAnimation()
     private var deadAnimation = CAAnimation()
     
+    //movement
+    private var previousUpdateTime = TimeInterval(0.0)
+    private var isWalking: Bool = false
+    
     //MARK: - initialization
     override init() {
         super.init()
@@ -82,9 +86,31 @@ class Player:SCNNode {
         animationObject.setValue("attack1", forKey: "animationId")
         attack1Animation = animationObject
         }
-        
     }
-}
+    
+    func walkIndirection(_ direction:float3, time: TimeInterval, scene: SCNScene) {
+        if previousUpdateTime == 0.0 {previousUpdateTime = time}
+        
+        let deltaTime = Float(min(time - previousUpdateTime, 1.0/60.0))
+        let characterSpeed = deltaTime * 1.3
+        
+        
+        //move
+        if direction.x != 0.0 && direction.z != 0.0 {
+            //move character
+            let pos = float3(position)
+            position = SCNVector3(pos + direction * characterSpeed)
+            
+            isWalking = true
+        } else {
+            isWalking = false
+
+            
+            }
+        
+        }
+    }
+
 
 
 extension Player: CAAnimationDelegate {
