@@ -28,7 +28,17 @@ class Player:SCNNode {
     
     //movement
     private var previousUpdateTime = TimeInterval(0.0)
-    private var isWalking: Bool = false
+    private var isWalking: Bool = false {
+        didSet {
+            if oldValue != isWalking {
+                if isWalking {
+                    characterNode.addAnimation(walkAnimation, forKey: "walk")
+                } else {
+                    characterNode.removeAnimation(forKey: "walk", blendOutDuration: 0.2)
+                }
+            }
+        }
+    }
     
     private var directionAngle: Float = 0.0 {
         didSet{
