@@ -23,6 +23,11 @@ class GameViewController: UIViewController {
     //nodes
     private var player: Player?
     
+    //movement
+    private var controllerStoreDirection = float2(0.0)
+    private var padTouch: UITouch?
+    
+    
     //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +76,38 @@ class GameViewController: UIViewController {
     }
     
     //MARK:- touches + movement
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            if gameView.virtualAttackButton().contains(touch.location(in: gameView)) {
+                if padTouch == nil {
+                    padTouch = touch
+                    controllerStoreDirection = float2(0.0)
+                }
+            }
+            if padTouch != nil {break}
+        }
+        
+    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = padTouch {
+            let displacement = float2(touch.location(in: view)) - float2(touch.previousLocation(in: view))
+            
+            let vMix = mix(controllerStoreDirection,displacement,t: 0.1)
+            let vClamp = clamp(vMix, min: -1.0, max: 1.0)
+            
+            controllerStoreDirection = vClamp
+            print(controllerStoreDirection)
+        }
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        padTouch = nil
+        controllerStoreDirection = float2(0.0)
+    }
+  
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        padTouch = nil
+        controllerStoreDirection = float2(0.0)
+    }
     //MARK:- gameloop functions
     //MARK:- enemies
 
