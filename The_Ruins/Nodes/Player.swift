@@ -28,7 +28,25 @@ class Player:SCNNode {
     
     //movement
     private var previousUpdateTime = TimeInterval(0.0)
-    private var isWalking: Bool = false
+    private var isWalking: Bool = false {
+        didSet {
+            if oldValue != isWalking {
+                if isWalking {
+                    characterNode.addAnimation(walkAnimation, forKey: "walk")
+                } else {
+                    characterNode.removeAnimation(forKey: "walk", blendOutDuration: 0.2)
+                }
+            }
+        }
+    }
+    
+    private var directionAngle: Float = 0.0 {
+        didSet{
+            if directionAngle != oldValue {
+                runAction(SCNAction.rotateTo(x: 0.0, y: CGFloat(directionAngle), z: 0.0, duration: 0.1, usesShortestUnitArc: true))
+            }
+        }
+    }
     
     //MARK: - initialization
     override init() {
@@ -100,6 +118,9 @@ class Player:SCNNode {
             //move character
             let pos = float3(position)
             position = SCNVector3(pos + direction * characterSpeed)
+            
+            //update angle
+            directionAngle = SCNFloat(atan2f(direction.x, direction.z))
             
             isWalking = true
         } else {

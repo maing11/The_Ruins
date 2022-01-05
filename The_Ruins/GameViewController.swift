@@ -22,6 +22,9 @@ class GameViewController: UIViewController {
     
     //nodes
     private var player: Player?
+    private var cameraStick:SCNNode!
+    private var cameraXHolder: SCNNode!
+    private var cameraYHolder: SCNNode!
     
     //movement
     private var controllerStoreDirection = float2(0.0)
@@ -33,6 +36,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         setupSence()
         setupPlayer()
+        setUpCamera()
         gameState = .playing
         
     }
@@ -66,6 +70,13 @@ class GameViewController: UIViewController {
     }
     //MARK:- walls
     //MARK:- camera
+    private func setUpCamera() {
+        cameraStick = mainScene.rootNode.childNode(withName: "CameraStick", recursively: false)!
+        cameraXHolder = mainScene.rootNode.childNode(withName: "xHolder", recursively: true)!
+
+        cameraYHolder = mainScene.rootNode.childNode(withName: "yHolder", recursively: true)!
+
+    }
     //MARK:- player
     private func setupPlayer() {
         player = Player()
