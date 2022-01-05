@@ -196,6 +196,27 @@ class GameViewController: UIViewController {
         lightstick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
 
     }
+    
+    //MARK:- walls
+    private func setupWallBitmasks() {
+        var collisionNodes = [SCNNode]()
+        
+        mainScene.rootNode.enumerateChildNodes {(node, _) in
+            switch node.name {
+            case let .some(s) where s.range(of: "collision") != nil :
+                collisionNodes.append(node)
+                
+                default:
+                    break
+            }
+        }
+        
+        for node in collisionNodes {
+            node.physicsBody = SCNPhysicsBody.static()
+            node.physicsBody!.categoryBitMask = BitmaskWall
+            node.physicsBody!.physicsShape = SCNPhysicsShape(node: node, options: [.type: SCNPhysicsShape.ShapeType.concavePolyhedron as NSString])
+        }
+    }
     //MARK:- enemies
 
 
