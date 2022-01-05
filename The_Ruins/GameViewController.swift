@@ -57,6 +57,9 @@ class GameViewController: UIViewController {
     private func setupSence() {
         gameView.allowsCameraControl = true
         gameView.antialiasingMode = .multisampling4X
+        gameView.delegate = self
+
+        
         mainScene = SCNScene(named: "art.scnassets/Scenes/Stage1.scn")
         gameView.scene = mainScene
         gameView.isPlaying = true
@@ -108,9 +111,37 @@ class GameViewController: UIViewController {
         padTouch = nil
         controllerStoreDirection = float2(0.0)
     }
+    
+    private func CharacterDirection() -> float3 {
+        var direction = float3(controllerStoreDirection.x, 0.0, controllerStoreDirection.y)
+        
+        if let pov = gameView.pointOfView {
+            
+            let p1 = pov.presentation.convertPosition(SCNVector3(direction), to: nil)
+            let p0 = pov.presentation.convertPosition(SCNVector3Zero, to: nil)
+            
+            direction = float3(Float(p1.x - p0.x), 0.0, Float(p1.z - p0.z))
+            
+            if direction.x != 0.0 || direction.z != 0.0 {
+                direction = normalize(direction)
+            }
+
+        }
+        return direction
+    }
     //MARK:- gameloop functions
     //MARK:- enemies
 
 
 }
 //MARK: extension
+
+
+extension GameViewController: SCNSceneRendererDelegate {
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        if gameState != .playing {return}
+        
+        let scene = gameView.scene!
+        let direction = CharacterDirection()
+    }
+}
