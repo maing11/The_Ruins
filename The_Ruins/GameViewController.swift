@@ -25,6 +25,7 @@ class GameViewController: UIViewController {
     private var cameraStick:SCNNode!
     private var cameraXHolder: SCNNode!
     private var cameraYHolder: SCNNode!
+    private var lightstick: SCNNode!
     
     //movement
     private var controllerStoreDirection = float2(0.0)
@@ -38,6 +39,7 @@ class GameViewController: UIViewController {
         setupSence()
         setupPlayer()
         setUpCamera()
+        setupLight()
         gameState = .playing
         
     }
@@ -99,6 +101,11 @@ class GameViewController: UIViewController {
         cameraXHolder.rotation = SCNVector4Make(0, 1, 0, xRotationValue)
         cameraYHolder.rotation = SCNVector4Make(1, 0, 0, yRotationValue)
 
+        
+    }
+    
+    private func setupLight() {
+        lightstick = mainScene.rootNode.childNode(withName: "LightStick", recursively: false)!
         
     }
     
@@ -174,6 +181,12 @@ class GameViewController: UIViewController {
         return direction
     }
     //MARK:- gameloop functions
+    
+    func updateFollowersPositions() {
+        cameraStick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
+        lightstick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
+
+    }
     //MARK:- enemies
 
 
@@ -189,5 +202,7 @@ extension GameViewController: SCNSceneRendererDelegate {
         let direction = CharacterDirection()
         
         player!.walkIndirection(direction, time: time, scene: scene)
+        
+        updateFollowersPositions()
     }
 }
