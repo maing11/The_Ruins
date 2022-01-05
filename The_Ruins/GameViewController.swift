@@ -9,6 +9,10 @@ import UIKit
 import SceneKit
 
 
+let BitmaskPlayer = 1
+let BitmaskplayerWeapon = 2
+let BitmaskWall = 64
+let BitmaskGolem  = 3
 enum GameState {
     case loading, playing
 }
@@ -32,6 +36,10 @@ class GameViewController: UIViewController {
     private var padTouch: UITouch?
     private var cameraTouch: UITouch?
     
+    
+    //collisions
+    private var maxPenetrationDistance = CGFloat(0.0)
+    private var replacementPositions = [SCNNode:SCNVector3]()
     
     //MARK: - lifecycle
     override func viewDidLoad() {
@@ -68,6 +76,7 @@ class GameViewController: UIViewController {
 
         
         mainScene = SCNScene(named: "art.scnassets/Scenes/Stage1.scn")
+        mainScene.physicsWorld.contactDelegate = self
         gameView.scene = mainScene
         gameView.isPlaying = true
     }
@@ -193,10 +202,30 @@ class GameViewController: UIViewController {
 }
 //MARK: extension
 
+//physics
+extension GameViewController:SCNPhysicsContactDelegate {
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+    }
+    func physicsWorld(_ world: SCNPhysicsWorld, didUpdate contact: SCNPhysicsContact) {
+        
+    }
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        
+    }
+}
 
 extension GameViewController: SCNSceneRendererDelegate {
+    
+    func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
+        
+    }
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if gameState != .playing {return}
+        
+        //reset
+        replacementPositions.removeAll()
+        maxPenetrationDistance = 0.0
         
         let scene = gameView.scene!
         let direction = CharacterDirection()
