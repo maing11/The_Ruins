@@ -29,6 +29,7 @@ class GameViewController: UIViewController {
     //movement
     private var controllerStoreDirection = float2(0.0)
     private var padTouch: UITouch?
+    private var cameraTouch: UITouch?
     
     
     //MARK: - lifecycle
@@ -77,6 +78,30 @@ class GameViewController: UIViewController {
         cameraYHolder = mainScene.rootNode.childNode(withName: "yHolder", recursively: true)!
 
     }
+    
+    
+    private func panCamera(_ direction: float2){
+        var directionToPan = direction
+        directionToPan *= float2(1.0, -1.0)
+        
+        let panReducer = Float(0.005)
+        
+        let currX = cameraYHolder.rotation
+        let xRotationValue = currX.w - directionToPan.x * panReducer
+        
+        let currY = cameraYHolder.rotation
+        var yRotationValue = currY.w - directionToPan.y * panReducer
+        
+        if yRotationValue < -0.94 {yRotationValue = -0.94}
+        if yRotationValue > 0.66 {yRotationValue = 0.66}
+
+        
+        cameraXHolder.rotation = SCNVector4Make(0, 1, 0, xRotationValue)
+        cameraYHolder.rotation = SCNVector4Make(1, 0, 0, yRotationValue)
+
+        
+    }
+    
     //MARK:- player
     private func setupPlayer() {
         player = Player()
@@ -96,6 +121,8 @@ class GameViewController: UIViewController {
                 if padTouch == nil {
                     padTouch = touch
                     controllerStoreDirection = float2(0.0)
+                } else if cameraTouch == nil {
+                    cameraTouch = touches.first
                 }
             }
             if padTouch != nil {break}
@@ -111,16 +138,22 @@ class GameViewController: UIViewController {
             
             controllerStoreDirection = vClamp
             print(controllerStoreDirection)
+        } else if let touch = cameraTouch {
+            let displacement = float2(touch.location(in: view)) - float2(touch.previousLocation(in: view))
+            panCamera(displacement)
         }
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         padTouch = nil
         controllerStoreDirection = float2(0.0)
+        cameraTouch = nil
     }
   
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         padTouch = nil
         controllerStoreDirection = float2(0.0)
+        cameraTouch = nil
+
     }
     
     private func CharacterDirection() -> float3 {
