@@ -9,11 +9,11 @@ import UIKit
 import SceneKit
 
 
-let BitMaskPlayer = 1
-let BitmaskPlayerWeapon = 2
-let BitmaskWall = 64
-let BitmaskGolem = 3
 
+let BitmaskPlayer = 1
+let BitmaskplayerWeapon = 2
+let BitmaskWall = 64
+let BitmaskGolem  = 3
 enum GameState {
     case loading, playing
 }
@@ -27,17 +27,28 @@ class GameViewController: UIViewController {
     
     //nodes
     private var player: Player?
+    private var cameraStick:SCNNode!
+    private var cameraXHolder: SCNNode!
+    private var cameraYHolder: SCNNode!
+    private var lightstick: SCNNode!
     
     //movement
     private var controllerStoreDirection = float2(0.0)
     private var padTouch: UITouch?
+    private var cameraTouch: UITouch?
     
+    
+    //collisions
+    private var maxPenetrationDistance = CGFloat(0.0)
+    private var replacementPositions = [SCNNode:SCNVector3]()
     
     //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSence()
         setupPlayer()
+        setUpCamera()
+        setupLight()
         gameState = .playing
         
     }
@@ -66,11 +77,48 @@ class GameViewController: UIViewController {
 
         
         mainScene = SCNScene(named: "art.scnassets/Scenes/Stage1.scn")
+        mainScene.physicsWorld.contactDelegate = self
         gameView.scene = mainScene
         gameView.isPlaying = true
     }
     //MARK:- walls
     //MARK:- camera
+    private func setUpCamera() {
+        cameraStick = mainScene.rootNode.childNode(withName: "CameraStick", recursively: false)!
+        cameraXHolder = mainScene.rootNode.childNode(withName: "xHolder", recursively: true)!
+
+        cameraYHolder = mainScene.rootNode.childNode(withName: "yHolder", recursively: true)!
+
+    }
+    
+    
+    private func panCamera(_ direction: float2){
+        var directionToPan = direction
+        directionToPan *= float2(1.0, -1.0)
+        
+        let panReducer = Float(0.005)
+        
+        let currX = cameraYHolder.rotation
+        let xRotationValue = currX.w - directionToPan.x * panReducer
+        
+        let currY = cameraYHolder.rotation
+        var yRotationValue = currY.w - directionToPan.y * panReducer
+        
+        if yRotationValue < -0.94 {yRotationValue = -0.94}
+        if yRotationValue > 0.66 {yRotationValue = 0.66}
+
+        
+        cameraXHolder.rotation = SCNVector4Make(0, 1, 0, xRotationValue)
+        cameraYHolder.rotation = SCNVector4Make(1, 0, 0, yRotationValue)
+
+        
+    }
+    
+    private func setupLight() {
+        lightstick = mainScene.rootNode.childNode(withName: "LightStick", recursively: false)!
+        
+    }
+    
     //MARK:- player
     private func setupPlayer() {
         player = Player()
@@ -92,6 +140,8 @@ class GameViewController: UIViewController {
                 if padTouch == nil {
                     padTouch = touch
                     controllerStoreDirection = float2(0.0)
+                } else if cameraTouch == nil {
+                    cameraTouch = touches.first
                 }
             }
             if padTouch != nil {break}
@@ -107,16 +157,22 @@ class GameViewController: UIViewController {
             
             controllerStoreDirection = vClamp
             print(controllerStoreDirection)
+        } else if let touch = cameraTouch {
+            let displacement = float2(touch.location(in: view)) - float2(touch.previousLocation(in: view))
+            panCamera(displacement)
         }
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         padTouch = nil
         controllerStoreDirection = float2(0.0)
+        cameraTouch = nil
     }
   
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         padTouch = nil
         controllerStoreDirection = float2(0.0)
+        cameraTouch = nil
+
     }
     
     private func CharacterDirection() -> float3 {
@@ -137,20 +193,69 @@ class GameViewController: UIViewController {
         return direction
     }
     //MARK:- gameloop functions
+    
+    func updateFollowersPositions() {
+        cameraStick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
+        lightstick.position = SCNVector3Make(player!.position.x, 0.0, player!.position.z)
+
+    }
+    
+    //MARK:- walls
+    private func setupWallBitmasks() {
+        var collisionNodes = [SCNNode]()
+        
+        mainScene.rootNode.enumerateChildNodes {(node, _) in
+            switch node.name {
+            case let .some(s) where s.range(of: "collision") != nil :
+                collisionNodes.append(node)
+                
+                default:
+                    break
+            }
+        }
+        
+        for node in collisionNodes {
+            node.physicsBody = SCNPhysicsBody.static()
+            node.physicsBody!.categoryBitMask = BitmaskWall
+            node.physicsBody!.physicsShape = SCNPhysicsShape(node: node, options: [.type: SCNPhysicsShape.ShapeType.concavePolyhedron as NSString])
+        }
+    }
     //MARK:- enemies
 
 
 }
 //MARK: extension
 
+//physics
+extension GameViewController:SCNPhysicsContactDelegate {
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+    }
+    func physicsWorld(_ world: SCNPhysicsWorld, didUpdate contact: SCNPhysicsContact) {
+        
+    }
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        
+    }
+}
 
 extension GameViewController: SCNSceneRendererDelegate {
+    
+    func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
+        
+    }
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if gameState != .playing {return}
+        
+        //reset
+        replacementPositions.removeAll()
+        maxPenetrationDistance = 0.0
         
         let scene = gameView.scene!
         let direction = CharacterDirection()
         
         player!.walkIndirection(direction, time: time, scene: scene)
+        
+        updateFollowersPositions()
     }
 }
