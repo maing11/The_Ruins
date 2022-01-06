@@ -9,6 +9,11 @@ import UIKit
 import SceneKit
 
 
+let BitMaskPlayer = 1
+let BitmaskPlayerWeapon = 2
+let BitmaskWall = 64
+let BitmaskGolem = 3
+
 enum GameState {
     case loading, playing
 }
@@ -74,6 +79,8 @@ class GameViewController: UIViewController {
         player!.rotation = SCNVector4Make(0, 1, 0, Float.pi)
         
         mainScene.rootNode.addChildNode(player!)
+        
+        player!.setupCollider(with: 0.0026)
 
 
     }
