@@ -140,6 +140,7 @@ class Player:SCNNode {
         var endpoint1 = pos
         endpoint0.y -= 0.1
         endpoint1.y += 0.08
+
         
         let results = scene.physicsWorld.rayTestWithSegment(from: endpoint1, to: endpoint0, options: [.collisionBitMask: BitmaskWall, .searchMode: SCNPhysicsWorld.TestSearchMode.closest])
         
