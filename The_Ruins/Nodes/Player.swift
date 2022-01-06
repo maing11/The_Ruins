@@ -115,7 +115,9 @@ class Player:SCNNode {
         
         let deltaTime = Float(min(time - previousUpdateTime, 1.0/60.0))
         let characterSpeed = deltaTime * 1.3
+        previousUpdateTime = time
         
+        let initialPosition = position
         
         //move
         if direction.x != 0.0 && direction.z != 0.0 {
@@ -128,10 +130,27 @@ class Player:SCNNode {
             
             isWalking = true
         } else {
+            
             isWalking = false
 
-            
             }
+        //updatae altitude
+        var pos = position
+        var endpoint0 = pos
+        var endpoint1 = pos
+        endpoint0.y -= 0.1
+        endpoint1.y += 0.08
+        
+        let results = scene.physicsWorld.rayTestWithSegment(from: endpoint1, to: endpoint0, options: [.collisionBitMask: BitmaskWall, .searchMode: SCNPhysicsWorld.TestSearchMode.closest])
+        
+        if let result = results.first {
+            let groundAltidute = result.worldCoordinates.y
+            pos.y = groundAltidute
+            
+            position = pos
+        } else {
+            position = initialPosition
+        }
         
         }
     
