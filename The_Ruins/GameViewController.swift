@@ -9,6 +9,7 @@ import UIKit
 import SceneKit
 
 
+
 let BitmaskPlayer = 1
 let BitmaskplayerWeapon = 2
 let BitmaskWall = 64
@@ -126,6 +127,8 @@ class GameViewController: UIViewController {
         player!.rotation = SCNVector4Make(0, 1, 0, Float.pi)
         
         mainScene.rootNode.addChildNode(player!)
+        
+        player!.setupCollider(with: 0.0026)
 
 
     }

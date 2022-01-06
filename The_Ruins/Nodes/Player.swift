@@ -20,6 +20,7 @@ class Player:SCNNode {
     //nodes
     private var daeHolderNode = SCNNode()
     private var characterNode:SCNNode!
+    private var collider: SCNNode!
     
     //animations
     private var walkAnimation = CAAnimation()
@@ -47,6 +48,9 @@ class Player:SCNNode {
             }
         }
     }
+    
+    //collisions
+    var replacementPosition:SCNVector3 = SCNVector3Zero
     
     //MARK: - initialization
     override init() {
@@ -130,6 +134,24 @@ class Player:SCNNode {
             }
         
         }
+    
+    func setupCollider(with scale : CGFloat) {
+        let geometry = SCNCapsule(capRadius: 47, height: 165)
+        geometry.firstMaterial?.diffuse.contents = UIColor.red
+        
+        collider = SCNNode(geometry: geometry)
+        collider.position = SCNVector3Make(0.0, 140.0, 0.0)
+        collider.name = "collider"
+        collider.opacity = 1.0
+        
+        let physicsGeometry = SCNCapsule(capRadius: 47*scale, height: 165*scale)
+        let physicsShape = SCNPhysicsShape(geometry: physicsGeometry, options: nil)
+        collider.physicsBody = SCNPhysicsBody(type: .kinematic, shape: physicsShape)
+        collider.physicsBody!.categoryBitMask = BitMaskPlayer
+        collider.physicsBody!.contactTestBitMask = BitmaskWall
+        
+        addChildNode(collider)
+    }
     }
 
 
