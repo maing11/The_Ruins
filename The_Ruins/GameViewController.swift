@@ -220,8 +220,23 @@ class GameViewController: UIViewController {
             node.physicsBody!.physicsShape = SCNPhysicsShape(node: node, options: [.type: SCNPhysicsShape.ShapeType.concavePolyhedron as NSString])
         }
     }
-    //MARK:- enemies
+    //MARK:- collisions
+    private func characterNode(_ characterNode: SCNNode, hitwall wall: SCNNode, withContact contact: SCNPhysicsContact) {
+        if characterNode.name != "collider" {return}
+        
+        if maxPenetrationDistance > contact.penetrationDistance {return }
+        
+        maxPenetrationDistance = contact.penetrationDistance
+        
+        var characterPosition = float3(characterNode.parent!.position)
+        var positionOffest = float3(contact.contactNormal) * Float(contact.penetrationDistance)
+        positionOffest.y = 0
+        characterPosition += positionOffest
+        
+        replacementPositions[characterNode.parent!] = SCNVector3(characterPosition)
+    }
 
+    //MARK:- enemies
 
 }
 //MARK: extension
@@ -230,9 +245,22 @@ class GameViewController: UIViewController {
 extension GameViewController:SCNPhysicsContactDelegate {
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         
+        if gameState != .playing {return}
+        
+//        print(contact.nodeA.name)
+//        print(contact.nodeB.name)
+        
+        //if player collide with wall
+        contact.match(BitmaskWall) { matching, other in
+            self.characterNode(other, hitwall: matching, withContact: contact)
+        }
+        
     }
     func physicsWorld(_ world: SCNPhysicsWorld, didUpdate contact: SCNPhysicsContact) {
-        
+        //if player collide with wall
+        contact.match(BitmaskWall) { matching, other in
+            self.characterNode(other, hitwall: matching, withContact: contact)
+        }
     }
     func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
         
@@ -242,7 +270,11 @@ extension GameViewController:SCNPhysicsContactDelegate {
 extension GameViewController: SCNSceneRendererDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
+        if gameState != .playing {return}
         
+        for (node ,position) in replacementPositions {
+            node.position = position
+        }
     }
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if gameState != .playing {return}
