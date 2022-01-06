@@ -142,12 +142,12 @@ class Player:SCNNode {
         collider = SCNNode(geometry: geometry)
         collider.position = SCNVector3Make(0.0, 140.0, 0.0)
         collider.name = "collider"
-        collider.opacity = 1.0
+        collider.opacity = 0.0
         
         let physicsGeometry = SCNCapsule(capRadius: 47*scale, height: 165*scale)
         let physicsShape = SCNPhysicsShape(geometry: physicsGeometry, options: nil)
         collider.physicsBody = SCNPhysicsBody(type: .kinematic, shape: physicsShape)
-        collider.physicsBody!.categoryBitMask = BitMaskPlayer
+        collider.physicsBody!.categoryBitMask = BitmaskPlayer 
         collider.physicsBody!.contactTestBitMask = BitmaskWall
         
         addChildNode(collider)
