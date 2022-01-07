@@ -65,9 +65,9 @@ class Golem: SCNNode {
     }
     
     private func loadAnimations(){
-        loadAnimation(animationType: .walk, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Flight ", withIdentifier: "unnamed_animation__1")
-        loadAnimation(animationType: .attack1, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Dead ", withIdentifier: "Golem@Dead-1")
-        loadAnimation(animationType: .dead, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Attack(1) ", withIdentifier: "Golem@Attack(1)-1")
+        loadAnimation(animationType: .walk, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Flight", withIdentifier: "unnamed_animation__1")
+        loadAnimation(animationType: .dead, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Dead", withIdentifier: "Golem@Dead-1")
+        loadAnimation(animationType: .attack1, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Attack(1)", withIdentifier: "Golem@Attack(1)-1")
     }
     
     private func loadAnimation(animationType: GolemAnimationType, inSceneName scene: String, withIdentifier identifier: String) {
@@ -99,6 +99,7 @@ class Golem: SCNNode {
 
 }
 
+// Conform to CAAniamtion Delegate protocol
 extension Golem: CAAnimationDelegate {
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard let id = anim.value(forKey: "animationId") as? String else {return}
