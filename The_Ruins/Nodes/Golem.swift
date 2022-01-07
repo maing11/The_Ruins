@@ -31,6 +31,8 @@ class Golem: SCNNode {
     private var deadAnimation = CAAnimation()
     private var attack1Animation = CAAnimation()
 
+    // movement
+    private var previousUpdateTime = TimeInterval(0.0)
 
     init(enymy: Player, view: GameView) {
         super.init()
@@ -97,6 +99,20 @@ class Golem: SCNNode {
         }
     }
 
+    
+    //MARK:- movement
+    func update(with time: TimeInterval, and scene: SCNScene) {
+        guard let enemy = enemy else {return}
+        
+        //delta time
+        if previousUpdateTime == 0.0 {previousUpdateTime = time}
+        let deltaTime = Float(min(time - previousUpdateTime, 1.0/60.0))
+        previousUpdateTime  = time
+        
+        //get distance
+        let distance = GameUtils.distanceBetweenVectors(vector1: enemy.position, vector2: position)
+        print(distance)
+    }
 }
 
 // Conform to CAAniamtion Delegate protocol

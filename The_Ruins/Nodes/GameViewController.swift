@@ -328,5 +328,17 @@ extension GameViewController: SCNSceneRendererDelegate {
         player!.walkIndirection(direction, time: time, scene: scene)
         
         updateFollowersPositions()
+        
+        //golems
+        mainScene.rootNode.enumerateChildNodes { node, _ in
+            if let name = node.name {
+                switch name {
+                case "Golem":
+                    (node as! Golem).update(with: time, and: scene)
+                default:
+                     break
+                }
+            }
+        }
     }
 }
