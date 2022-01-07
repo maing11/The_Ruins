@@ -42,6 +42,10 @@ class GameViewController: UIViewController {
     private var maxPenetrationDistance = CGFloat(0.0)
     private var replacementPositions = [SCNNode:SCNVector3]()
     
+    
+    //enemies
+    private var golemPositionArray = [String: SCNVector3]()
+    
     //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +54,7 @@ class GameViewController: UIViewController {
         setUpCamera()
         setupLight()
         gameState = .playing
+        setupEnemies()
         
     }
     
@@ -237,7 +242,38 @@ class GameViewController: UIViewController {
     }
 
     //MARK:- enemies
+    private func setupEnemies() {
+        let enemies = mainScene.rootNode.childNode(withName: "Enemies", recursively: false)!
+        for child in enemies.childNodes {
+            golemPositionArray[child.name!] = child.position
+        }
+        setupGolems()
+    }
+    
+    private func setupGolems() {
+        let golemScale: Float = 0.0083
+        
+        let golem1 = Golem(enymy: player!, view: gameView)
+        golem1.scale = SCNVector3Make(golemScale, golemScale, golemScale)
+        golem1.position = golemPositionArray["golem1"]!
+        
+        let golem2 = Golem(enymy: player!, view: gameView)
+        golem2.scale = SCNVector3Make(golemScale, golemScale, golemScale)
+        golem2.position = golemPositionArray["golem2"]!
+        
+        let golem3 = Golem(enymy: player!, view: gameView)
+        golem3.scale = SCNVector3Make(golemScale, golemScale, golemScale)
+        golem3.position = golemPositionArray["golem3"]!
+        
+        gameView.prepare([golem1,golem2,golem3]) { finished in
+            self.mainScene.rootNode.addChildNode(golem1)
+            self.mainScene.rootNode.addChildNode(golem2)
+            self.mainScene.rootNode.addChildNode(golem3)
 
+
+        }
+        
+    }
 }
 //MARK: extension
 
@@ -265,6 +301,9 @@ extension GameViewController:SCNPhysicsContactDelegate {
     func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
         
     }
+    
+    
+    
 }
 
 extension GameViewController: SCNSceneRendererDelegate {

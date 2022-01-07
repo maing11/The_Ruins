@@ -66,7 +66,6 @@
 				CA5FFA1C2783B35E00345A26 /* Helpers */,
 				CA5FFA092783A44F00345A26 /* art.scnassets */,
 				CA5FFA1A2783B35500345A26 /* GameView.swift */,
-				CA5FFA0B2783A44F00345A26 /* GameViewController.swift */,
 				CA5FFA0D2783A44F00345A26 /* Main.storyboard */,
 				CA5FFA072783A44F00345A26 /* AppDelegate.swift */,
 				CA5FFA102783A45100345A26 /* Assets.xcassets */,
@@ -88,6 +87,7 @@
 			children = (
 				CA5FFA1E2784025D00345A26 /* Player.swift */,
 				CA65BB432787B15200091D2A /* Golem.swift */,
+				CA5FFA0B2783A44F00345A26 /* GameViewController.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
