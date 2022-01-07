@@ -33,6 +33,20 @@ class Golem: SCNNode {
 
     // movement
     private var previousUpdateTime = TimeInterval(0.0)
+    private let noticeDistance:Float = 1.4
+    private let movementSpeedLimiter = Float(0.5)
+    
+    private var isWalking:Bool = false {
+        didSet {
+            if oldValue != isWalking {
+                if isWalking {
+                    addAnimation(walkAnimation, forKey: "walk")
+                } else {
+                    removeAnimation(forKey: "walk")
+                }
+            }
+        }
+    }
 
     init(enymy: Player, view: GameView) {
         super.init()
@@ -112,6 +126,27 @@ class Golem: SCNNode {
         //get distance
         let distance = GameUtils.distanceBetweenVectors(vector1: enemy.position, vector2: position)
         print(distance)
+        
+        if distance < noticeDistance && distance > 0.01 {
+            //move
+            let vResult = GameUtils.getCoordinatesNeededToMoveToReachNode(form: position, to: enemy.position)
+            let vx = vResult.vX
+            let vz = vResult.vZ
+            let angle = vResult.vZ
+            
+            let characterSpeed = deltaTime * movementSpeedLimiter
+            
+            if vx != 0.0 && vz != 0.0 {
+                position.x += vx.characterSpeed
+                position.z += vz.characterSpeed
+                
+                isWalking = true
+
+            }
+            
+        } else {
+            isWalking = false
+        }
     }
 }
 
