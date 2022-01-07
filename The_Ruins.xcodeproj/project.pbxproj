@@ -14,6 +14,7 @@
 		CA5FFA112783A45100345A26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA5FFA102783A45100345A26 /* Assets.xcassets */; };
 		CA5FFA1B2783B35500345A26 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5FFA1A2783B35500345A26 /* GameView.swift */; };
 		CA5FFA1F2784025D00345A26 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5FFA1E2784025D00345A26 /* Player.swift */; };
+		CA65BB442787B15200091D2A /* Golem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA65BB432787B15200091D2A /* Golem.swift */; };
 		CA94F33027851DD5009CD815 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA94F32F27851DD5009CD815 /* Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		CA5FFA122783A45100345A26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA5FFA1A2783B35500345A26 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		CA5FFA1E2784025D00345A26 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		CA65BB432787B15200091D2A /* Golem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Golem.swift; sourceTree = "<group>"; };
 		CA94F32F27851DD5009CD815 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				CA5FFA1E2784025D00345A26 /* Player.swift */,
+				CA65BB432787B15200091D2A /* Golem.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA65BB442787B15200091D2A /* Golem.swift in Sources */,
 				CA94F33027851DD5009CD815 /* Extension.swift in Sources */,
 				CA5FFA1F2784025D00345A26 /* Player.swift in Sources */,
 				CA5FFA0C2783A44F00345A26 /* GameViewController.swift in Sources */,
