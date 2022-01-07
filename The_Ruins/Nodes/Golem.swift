@@ -39,9 +39,11 @@ class Golem: SCNNode {
     private var isWalking:Bool = false {
         didSet {
             if oldValue != isWalking {
+                
                 if isWalking {
                     addAnimation(walkAnimation, forKey: "walk")
                 } else {
+                    
                     removeAnimation(forKey: "walk")
                 }
             }
@@ -134,11 +136,15 @@ class Golem: SCNNode {
             let vz = vResult.vZ
             let angle = vResult.vZ
             
+            //rotate
+            let fixedAngle = GameUtils.getFixedRotationAngle(with: angle)
+            eulerAngles = SCNVector3Make(0, fixedAngle, 0)
+            
             let characterSpeed = deltaTime * movementSpeedLimiter
             
             if vx != 0.0 && vz != 0.0 {
-                position.x += vx.characterSpeed
-                position.z += vz.characterSpeed
+                position.x += vx * characterSpeed
+                position.z += vz * characterSpeed
                 
                 isWalking = true
 

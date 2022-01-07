@@ -25,4 +25,9 @@ struct GameUtils {
         
         return(vx,vz,angle)
     }
+    
+    //fix 90 degrees difference
+    static func getFixedRotationAngle(with angle: Float) -> Float {
+        return (Float.pi/2) - angle
+    }
 }
