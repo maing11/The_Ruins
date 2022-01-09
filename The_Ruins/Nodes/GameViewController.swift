@@ -269,7 +269,10 @@ class GameViewController: UIViewController {
             self.mainScene.rootNode.addChildNode(golem1)
             self.mainScene.rootNode.addChildNode(golem2)
             self.mainScene.rootNode.addChildNode(golem3)
-
+            
+            golem1.setupCollider(scale: CGFloat(golemScale))
+            golem2.setupCollider(scale: CGFloat(golemScale))
+            golem3.setupCollider(scale: CGFloat(golemScale))
 
         }
         

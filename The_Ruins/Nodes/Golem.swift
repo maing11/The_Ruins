@@ -25,6 +25,7 @@ class Golem: SCNNode {
     private let daeHolderNode = SCNNode()
     private var characterNode: SCNNode!
     private var enemy: Player!
+    private var collider: SCNNode!
     
     //animations
     private var walkAnimation = CAAnimation()
@@ -175,6 +176,27 @@ class Golem: SCNNode {
             position = initialPosition
         }
         
+    }
+    
+    //MARK:- collisions
+    func setupCollider(scale: CGFloat) {
+        let geometry = SCNCapsule(capRadius: 13, height: 52)
+        geometry.firstMaterial?.diffuse.contents = UIColor.blue
+        collider = SCNNode(geometry:geometry)
+        collider.name = "golemCollider"
+        collider.position = SCNVector3Make(0, 46, 0)
+        collider.opacity = 1.0
+        
+        
+        let shapeGeometry = SCNCapsule(capRadius: 13 * scale, height: 52 * scale)
+        let physicsShape = SCNPhysicsShape(geometry: shapeGeometry, options: nil)
+        collider.physicsBody?.categoryBitMask = BitmaskGolem
+        collider.physicsBody!.contactTestBitMask = BitmaskWall | BitmaskPlayer | BitmaskplayerWeapon
+        
+        gameView.prepare([collider]) {
+            (finished) in
+            self.addChildNode(self.collider)
+        }
     }
 }
 
