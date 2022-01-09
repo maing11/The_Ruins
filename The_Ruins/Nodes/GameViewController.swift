@@ -227,7 +227,8 @@ class GameViewController: UIViewController {
     }
     //MARK:- collisions
     private func characterNode(_ characterNode: SCNNode, hitwall wall: SCNNode, withContact contact: SCNPhysicsContact) {
-        if characterNode.name != "collider" {return}
+        
+        if characterNode.name != "collider" && characterNode.name != "golemCollider" {return}
         
         if maxPenetrationDistance > contact.penetrationDistance {return }
         
@@ -293,6 +294,12 @@ extension GameViewController:SCNPhysicsContactDelegate {
         contact.match(BitmaskWall) { matching, other in
             self.characterNode(other, hitwall: matching, withContact: contact)
         }
+        // if player collide with golem
+        contact.match(BitmaskGolem) { (matching, other) in
+            
+            let golem = matching.parent as! Golem
+            if other.name == "collider" {golem.isCollideWithEnemy = true }
+        }
         
     }
     func physicsWorld(_ world: SCNPhysicsWorld, didUpdate contact: SCNPhysicsContact) {
@@ -300,9 +307,22 @@ extension GameViewController:SCNPhysicsContactDelegate {
         contact.match(BitmaskWall) { matching, other in
             self.characterNode(other, hitwall: matching, withContact: contact)
         }
+        
+        // if player collide with golem
+        contact.match(BitmaskGolem) { (matching, other) in
+            
+            let golem = matching.parent as! Golem
+            if other.name == "collider" {golem.isCollideWithEnemy = true }
+        }
     }
     func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
-        
+        // if player collide with golem
+        contact.match(BitmaskGolem) { (matching, other) in
+            
+            let golem = matching.parent as! Golem
+            if other.name == "collider" {golem.isCollideWithEnemy = false }
+        }
+
     }
     
     
