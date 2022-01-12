@@ -30,11 +30,17 @@ class Player:SCNNode {
     //movement
     private var previousUpdateTime = TimeInterval(0.0)
     private var isWalking: Bool = false {
+        
         didSet {
+            
             if oldValue != isWalking {
+                
                 if isWalking {
+                    
                     characterNode.addAnimation(walkAnimation, forKey: "walk")
+            
                 } else {
+                    
                     characterNode.removeAnimation(forKey: "walk", blendOutDuration: 0.2)
                 }
             }
@@ -68,17 +74,19 @@ class Player:SCNNode {
     }
     
     private func setupModel() {
-        // load dae childs
+        
+        //load dae childs
         let playerURL = Bundle.main.url(forResource: "art.scnassets/Scenes/Hero/idle", withExtension: "dae")
         let playerScene = try! SCNScene(url: playerURL!, options: nil)
         
         for child in playerScene.rootNode.childNodes {
+            
             daeHolderNode.addChildNode(child)
         }
         addChildNode(daeHolderNode)
+        
         //set mesh name
         characterNode = daeHolderNode.childNode(withName: "Bip01", recursively: true)!
-        
     }
     
     //MARK: - animations

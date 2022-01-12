@@ -83,7 +83,7 @@ class GameView: SCNView {
     private func setupAttackButton(with scene:SKScene) {
         
         attackButtonSprite = SKSpriteNode(imageNamed: "art.scnassets/Assets/attack1.png")
-        attackButtonSprite.position = CGPoint(x: bounds.size.height-110.0, y: 50)
+        attackButtonSprite.position = CGPoint(x: bounds.size.width-110.0, y: 50)
         attackButtonSprite.xScale = 1.0
         attackButtonSprite.yScale = 1.0
         attackButtonSprite.size = CGSize(width: 60.0, height: 60.0)

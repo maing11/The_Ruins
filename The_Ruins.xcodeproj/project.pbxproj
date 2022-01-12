@@ -8,29 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		CA5FFA082783A44F00345A26 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5FFA072783A44F00345A26 /* AppDelegate.swift */; };
-		CA5FFA0A2783A44F00345A26 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CA5FFA092783A44F00345A26 /* art.scnassets */; };
 		CA5FFA0C2783A44F00345A26 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5FFA0B2783A44F00345A26 /* GameViewController.swift */; };
 		CA5FFA0F2783A44F00345A26 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA5FFA0D2783A44F00345A26 /* Main.storyboard */; };
-		CA5FFA112783A45100345A26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA5FFA102783A45100345A26 /* Assets.xcassets */; };
 		CA5FFA1B2783B35500345A26 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5FFA1A2783B35500345A26 /* GameView.swift */; };
 		CA5FFA1F2784025D00345A26 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5FFA1E2784025D00345A26 /* Player.swift */; };
 		CA65BB442787B15200091D2A /* Golem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA65BB432787B15200091D2A /* Golem.swift */; };
 		CA65BB462788116E00091D2A /* GameUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA65BB452788116E00091D2A /* GameUtils.swift */; };
+		CA734412278ED0AD008275B0 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CA734411278ED0AD008275B0 /* art.scnassets */; };
 		CA94F33027851DD5009CD815 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA94F32F27851DD5009CD815 /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		CA5FFA042783A44F00345A26 /* The_Ruins.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = The_Ruins.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA5FFA072783A44F00345A26 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CA5FFA092783A44F00345A26 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		CA5FFA0B2783A44F00345A26 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		CA5FFA0E2783A44F00345A26 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CA5FFA102783A45100345A26 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CA5FFA122783A45100345A26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA5FFA1A2783B35500345A26 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		CA5FFA1E2784025D00345A26 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		CA65BB432787B15200091D2A /* Golem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Golem.swift; sourceTree = "<group>"; };
 		CA65BB452788116E00091D2A /* GameUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUtils.swift; sourceTree = "<group>"; };
+		CA734411278ED0AD008275B0 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		CA94F32F27851DD5009CD815 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,10 +66,9 @@
 				CA5FFA0B2783A44F00345A26 /* GameViewController.swift */,
 				CA5FFA1A2783B35500345A26 /* GameView.swift */,
 				CA5FFA1C2783B35E00345A26 /* Helpers */,
-				CA5FFA092783A44F00345A26 /* art.scnassets */,
 				CA5FFA0D2783A44F00345A26 /* Main.storyboard */,
+				CA734411278ED0AD008275B0 /* art.scnassets */,
 				CA5FFA072783A44F00345A26 /* AppDelegate.swift */,
-				CA5FFA102783A45100345A26 /* Assets.xcassets */,
 				CA5FFA122783A45100345A26 /* Info.plist */,
 			);
 			path = The_Ruins;
@@ -152,8 +149,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA5FFA0A2783A44F00345A26 /* art.scnassets in Resources */,
-				CA5FFA112783A45100345A26 /* Assets.xcassets in Resources */,
+				CA734412278ED0AD008275B0 /* art.scnassets in Resources */,
 				CA5FFA0F2783A44F00345A26 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
