@@ -51,11 +51,15 @@ class Player:SCNNode {
     
     //collisions
     var replacementPosition:SCNVector3 = SCNVector3Zero
+    private var activeWeaponCollideNodes = Set<SCNNode>()
+    
+    //battle
     
     //MARK: - initialization
     override init() {
         super.init()
         setupModel()
+        loadAnimation()
     }
     
     
@@ -79,11 +83,15 @@ class Player:SCNNode {
     
     //MARK: - animations
     private func loadAnimation() {
+        
         loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Scenes/Hero/walk", withIdentifier: "WalkID")
+        
         loadAnimation(animationType: .attack1, inSceneNamed: "art.scnassets/Scenes/Hero/attack", withIdentifier: "attackID")
+        
         loadAnimation(animationType: .dead, inSceneNamed: "art.scnassets/Scenes/Hero/die", withIdentifier: "DeathID")
+        
     }
-    private func loadAnimation(animationType: PlayerAnimationType,inSceneNamed scene: String, withIdentifier identifier: String) {
+    private func loadAnimation(animationType: PlayerAnimationType, inSceneNamed scene: String, withIdentifier identifier: String) {
         let sceneURL = Bundle.main.url(forResource: scene, withExtension: "dae")!
         let sceneSource = SCNSceneSource(url: sceneURL, options: nil)!
         
@@ -110,8 +118,12 @@ class Player:SCNNode {
         }
     }
     
-    func walkIndirection(_ direction:float3, time: TimeInterval, scene: SCNScene) {
-        if previousUpdateTime == 0.0 {previousUpdateTime = time}
+    //MARK:- movement
+    
+    func walkInDirection(_ direction:float3, time: TimeInterval, scene: SCNScene) {
+        
+        
+        if previousUpdateTime == 0.0 { previousUpdateTime = time }
         
         let deltaTime = Float(min(time - previousUpdateTime, 1.0/60.0))
         let characterSpeed = deltaTime * 1.3
@@ -121,39 +133,43 @@ class Player:SCNNode {
         
         //move
         if direction.x != 0.0 && direction.z != 0.0 {
+            
             //move character
             let pos = float3(position)
-            position = SCNVector3(pos + direction * characterSpeed)
+            position = SCNVector3(pos+direction * characterSpeed)
             
             //update angle
             directionAngle = SCNFloat(atan2f(direction.x, direction.z))
             
             isWalking = true
+            
         } else {
             
             isWalking = false
-
-            }
-        //updatae altitude
+        }
+        
+        //update altidute
         var pos = position
         var endpoint0 = pos
         var endpoint1 = pos
+        
         endpoint0.y -= 0.1
         endpoint1.y += 0.08
-
         
         let results = scene.physicsWorld.rayTestWithSegment(from: endpoint1, to: endpoint0, options: [.collisionBitMask: BitmaskWall, .searchMode: SCNPhysicsWorld.TestSearchMode.closest])
         
         if let result = results.first {
+            
             let groundAltidute = result.worldCoordinates.y
             pos.y = groundAltidute
             
             position = pos
+      
         } else {
+            
             position = initialPosition
         }
-        
-        }
+    }
     
     func setupCollider(with scale : CGFloat) {
         let geometry = SCNCapsule(capRadius: 47, height: 165)
@@ -172,9 +188,7 @@ class Player:SCNNode {
         
         addChildNode(collider)
     }
-    }
-
-
+}
 
 extension Player: CAAnimationDelegate {
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {

@@ -60,11 +60,13 @@ class Golem: SCNNode {
             }
         }
     }
+    
+    //attack
 
-    init(enymy: Player, view: GameView) {
+    init(enemy: Player, view: GameView) {
         super.init()
         self.gameView = view
-        self.gameView = view
+        self.enemy = enemy
         
         setupModelScene()
         loadAnimations()
@@ -94,17 +96,20 @@ class Golem: SCNNode {
     }
     
     private func loadAnimations(){
-        loadAnimation(animationType: .walk, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Flight", withIdentifier: "unnamed_animation__1")
-        loadAnimation(animationType: .dead, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Dead", withIdentifier: "Golem@Dead-1")
-        loadAnimation(animationType: .attack1, inSceneName: "art.scnassets/Scenes/Enemies/Golem@Attack(1)", withIdentifier: "Golem@Attack(1)-1")
+        
+        loadAnimation(animationType: .walk, inSceneNamed: "art.scnassets/Scenes/Enemies/Golem@Flight", withIdentifier: "unnamed_animation__1")
+        
+        loadAnimation(animationType: .dead, inSceneNamed: "art.scnassets/Scenes/Enemies/Golem@Dead", withIdentifier: "Golem@Dead-1")
+        
+        loadAnimation(animationType: .attack1, inSceneNamed: "art.scnassets/Scenes/Enemies/Golem@Attack(1)", withIdentifier: "Golem@Attack(1)-1")
     }
     
-    private func loadAnimation(animationType: GolemAnimationType, inSceneName scene: String, withIdentifier identifier: String) {
+    private func loadAnimation(animationType: GolemAnimationType, inSceneNamed scene: String, withIdentifier identifier: String) {
+        
         let sceneURL = Bundle.main.url(forResource: scene, withExtension: "dae")!
         let sceneSource = SCNSceneSource(url: sceneURL, options: nil)!
         
         let animationObject:CAAnimation = sceneSource.entryWithIdentifier(identifier, withClass: CAAnimation.self)!
-        
         
         animationObject.delegate = self
         animationObject.fadeInDuration = 0.2
@@ -113,16 +118,21 @@ class Golem: SCNNode {
         animationObject.repeatCount = 0
         
         switch animationType {
+            
         case .walk:
+            
             animationObject.repeatCount = Float.greatestFiniteMagnitude
             walkAnimation = animationObject
+            
         case .dead:
+            
             animationObject.isRemovedOnCompletion = false
             deadAnimation = animationObject
             
         case .attack1:
-        animationObject.setValue("attack1", forKey: "animationId")
-        attack1Animation = animationObject
+            
+            animationObject.setValue("attack1", forKey: "animationId")
+            attack1Animation = animationObject
         }
     }
 
@@ -145,7 +155,7 @@ class Golem: SCNNode {
             let vResult = GameUtils.getCoordinatesNeededToMoveToReachNode(form: position, to: enemy.position)
             let vx = vResult.vX
             let vz = vResult.vZ
-            let angle = vResult.vZ
+            let angle = vResult.angle
             
             //rotate
             let fixedAngle = GameUtils.getFixedRotationAngle(with: angle)
@@ -194,7 +204,6 @@ class Golem: SCNNode {
         } else {
             isWalking = false
         }
-        
     }
     
     //MARK:- collisions
@@ -204,13 +213,15 @@ class Golem: SCNNode {
         collider = SCNNode(geometry:geometry)
         collider.name = "golemCollider"
         collider.position = SCNVector3Make(0, 46, 0)
-        collider.opacity = 1.0
+        collider.opacity = 0.0
         
         
         let shapeGeometry = SCNCapsule(capRadius: 13 * scale, height: 52 * scale)
         let physicsShape = SCNPhysicsShape(geometry: shapeGeometry, options: nil)
-        collider.physicsBody?.categoryBitMask = BitmaskGolem
-        collider.physicsBody!.contactTestBitMask = BitmaskWall | BitmaskPlayer | BitmaskplayerWeapon
+        collider.physicsBody = SCNPhysicsBody(type: .kinematic, shape: physicsShape)
+        collider.physicsBody!.categoryBitMask = BitmaskGolem
+        collider.physicsBody!.contactTestBitMask = BitmaskWall | BitmaskPlayer | BitmaskPlayerWeapon
+        
         
         gameView.prepare([collider]) {
             (finished) in

@@ -16,11 +16,16 @@ extension float2 {
 
 
 extension SCNPhysicsContact {
-    func match(_ category: Int, block :(_ matching: SCNNode, _ other: SCNNode) -> Void) {
+    
+    func match(_ category:Int, block:(_ matching:SCNNode, _ other:SCNNode) -> Void) {
+        
         if self.nodeA.physicsBody!.categoryBitMask == category {
+            
             block(self.nodeA, self.nodeB)
         }
+        
         if self.nodeB.physicsBody!.categoryBitMask == category {
+            
             block(self.nodeB, self.nodeA)
         }
     }
